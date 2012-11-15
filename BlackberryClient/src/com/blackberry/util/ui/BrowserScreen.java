@@ -1,32 +1,6 @@
-/**
- * Copyright (c) E.Y. Baskoro, Research In Motion Limited.
- * 
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without 
- * restriction, including without limitation the rights to use, 
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the 
- * Software is furnished to do so, subject to the following 
- * conditions:
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
- * OTHER DEALINGS IN THE SOFTWARE.
- * 
- * This License shall be included in all copies or substantial 
- * portions of the Software.
- * 
- * The name(s) of the above copyright holders shall not be used 
- * in advertising or otherwise to promote the sale, use or other 
- * dealings in this Software without prior written authorization.
- * 
- */
+/*******************************************************************************
+ * BB Facebook Simple client
+ *******************************************************************************/
 package com.blackberry.util.ui;
 
 import javax.microedition.io.HttpConnection;
@@ -53,6 +27,7 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
+
 import org.w3c.dom.Document;
 
 import com.blackberry.util.StringUtils;
@@ -87,8 +62,6 @@ public class BrowserScreen extends MainScreen implements
 		bfc.setProperty(BrowserFieldConfig.ALLOW_CS_XHR, Boolean.TRUE);
 		bfc.setProperty(BrowserFieldConfig.JAVASCRIPT_ENABLED, Boolean.TRUE);
 		bfc.setProperty(BrowserFieldConfig.USER_SCALABLE, Boolean.TRUE);
-		bfc.setProperty(BrowserFieldConfig.MDS_TRANSCODING_ENABLED,
-				Boolean.FALSE);
 		bfc.setProperty(BrowserFieldConfig.NAVIGATION_MODE,
 				BrowserFieldConfig.NAVIGATION_MODE_POINTER);
 		bfc.setProperty(BrowserFieldConfig.VIEWPORT_WIDTH,
@@ -119,12 +92,11 @@ public class BrowserScreen extends MainScreen implements
 
 		hfm2 = new EvenlySpacedHorizontalFieldManager(USE_ALL_WIDTH);
 		spinner = new ProgressAnimationField(
-				Bitmap.getBitmapResource("spinner2.png"), 6,
-				Field.FIELD_HCENTER);
+				Bitmap.getBitmapResource("spinner.png"), 6, Field.FIELD_HCENTER);
 		spinner.setMargin(15, 15, 15, 15);
 		hfm2.add(spinner);
 
-		vfm = new VerticalFieldManager(USE_ALL_WIDTH);
+		vfm = new VerticalFieldManager(USE_ALL_WIDTH | FIELD_VCENTER);
 		vfm.add(hfm1);
 		vfm.add(hfm2);
 
