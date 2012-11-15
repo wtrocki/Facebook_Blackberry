@@ -24,7 +24,8 @@ public class StrawBerry extends UiApplication {
 	private Facebook fb4u;
 
 	public static void main(String[] args) {
-		new StrawBerry().enterEventDispatcher();
+		StrawBerry strawBerry = new StrawBerry();
+		strawBerry.enterEventDispatcher();
 	}
 
 	public StrawBerry() {
@@ -90,7 +91,6 @@ public class StrawBerry extends UiApplication {
 	public class HomeScreen extends MainScreen {
 
 		protected ButtonField showUserButton = null;
-		protected ButtonField unitTestsButton = null;
 		protected ButtonField logoutButton = null;
 
 		public HomeScreen() {
@@ -118,7 +118,6 @@ public class StrawBerry extends UiApplication {
 			setTitle(new LabelField("StrawBerry", LabelField.ELLIPSIS
 					| LabelField.USE_ALL_WIDTH));
 			add(showUserButton);
-			add(unitTestsButton);
 			add(logoutButton);
 
 		}
