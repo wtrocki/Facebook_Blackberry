@@ -55,7 +55,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 import org.w3c.dom.Document;
 
-import com.blackberry.util.xml.StringUtils;
+import com.blackberry.util.StringUtils;
 
 public class BrowserScreen extends MainScreen implements
 		BrowserFieldNavigationRequestHandler,

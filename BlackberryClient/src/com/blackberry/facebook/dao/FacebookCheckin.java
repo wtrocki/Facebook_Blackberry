@@ -40,7 +40,7 @@ import com.blackberry.facebook.inf.Application;
 import com.blackberry.facebook.inf.Checkin;
 import com.blackberry.facebook.inf.Location;
 import com.blackberry.facebook.inf.Profile;
-import com.blackberry.util.date.DateUtils;
+import com.blackberry.util.DateUtils;
 
 public class FacebookCheckin extends FacebookObject implements Checkin {
 

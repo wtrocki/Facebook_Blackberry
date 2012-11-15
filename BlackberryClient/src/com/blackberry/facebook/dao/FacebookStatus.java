@@ -40,7 +40,7 @@ import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.Comment;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.facebook.inf.Status;
-import com.blackberry.util.date.DateUtils;
+import com.blackberry.util.DateUtils;
 
 public class FacebookStatus extends FacebookObject implements Status {
 

@@ -27,7 +27,7 @@
  * dealings in this Software without prior written authorization.
  * 
  */
-package com.blackberry.util.date;
+package com.blackberry.util;
 
 import java.util.Date;
 

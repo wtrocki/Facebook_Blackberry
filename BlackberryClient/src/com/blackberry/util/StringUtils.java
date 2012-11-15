@@ -1,4 +1,4 @@
-package com.blackberry.util.xml;
+package com.blackberry.util;
 
 import java.util.Vector;
 

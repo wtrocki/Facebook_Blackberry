@@ -59,7 +59,7 @@ import com.blackberry.facebook.inf.Thread;
 import com.blackberry.facebook.inf.User;
 import com.blackberry.facebook.inf.Video;
 import com.blackberry.facebook.inf.Work;
-import com.blackberry.util.date.DateUtils;
+import com.blackberry.util.DateUtils;
 
 public class FacebookUser extends FacebookObject implements User {
 

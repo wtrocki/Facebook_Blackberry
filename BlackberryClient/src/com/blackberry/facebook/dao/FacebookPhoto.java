@@ -44,7 +44,7 @@ import com.blackberry.facebook.inf.Comment;
 import com.blackberry.facebook.inf.Photo;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.facebook.inf.Tag;
-import com.blackberry.util.date.DateUtils;
+import com.blackberry.util.DateUtils;
 
 public class FacebookPhoto extends FacebookObject implements Photo {
 

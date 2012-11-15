@@ -46,7 +46,7 @@ import com.blackberry.facebook.inf.Album;
 import com.blackberry.facebook.inf.Comment;
 import com.blackberry.facebook.inf.Photo;
 import com.blackberry.facebook.inf.Profile;
-import com.blackberry.util.date.DateUtils;
+import com.blackberry.util.DateUtils;
 
 public class FacebookAlbum extends FacebookObject implements Album {
 
