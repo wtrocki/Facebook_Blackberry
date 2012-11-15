@@ -33,11 +33,7 @@ import net.rim.device.api.io.transport.ConnectionDescriptor;
 import net.rim.device.api.io.transport.ConnectionFactory;
 import net.rim.device.api.io.transport.TransportInfo;
 
-import com.blackberry.util.log.Logger;
-
 public class LoggableConnectionFactory extends ConnectionFactory {
-
-	protected Logger log = Logger.getLogger(getClass());
 
 	public ConnectionDescriptor getConnection(String url) {
 		ConnectionDescriptor connd = super.getConnection(url);
@@ -55,7 +51,6 @@ public class LoggableConnectionFactory extends ConnectionFactory {
 		if (connd != null) {
 			String connurl = connd.getUrl();
 			String ttName = TransportInfo.getTransportTypeName(connd.getTransportDescriptor().getTransportType());
-			log.info("LoggableConnectionFactory (" + ttName + "): " + connurl);
 		}
 	}
 

@@ -31,6 +31,9 @@ package com.blackberry.facebook.dao;
 
 import java.util.Date;
 
+import org.json.me.JSONArray;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.Application;
@@ -38,8 +41,6 @@ import com.blackberry.facebook.inf.Checkin;
 import com.blackberry.facebook.inf.Location;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONArray;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookCheckin extends FacebookObject implements Checkin {
 

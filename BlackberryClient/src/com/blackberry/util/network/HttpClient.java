@@ -45,12 +45,9 @@ import net.rim.device.api.io.transport.ConnectionDescriptor;
 import net.rim.device.api.io.transport.ConnectionFactory;
 import net.rim.device.api.io.transport.TransportInfo;
 
-import com.blackberry.util.log.Logger;
-
 public class HttpClient {
 
 	protected ConnectionFactory cf;
-	protected Logger log;
 
 	protected static final String BOUNDARY = "----------V2ymHFg03ehbqgZCaKO6jy";
 	protected static final String START_BOUNDARY = "--" + BOUNDARY + "\r\n";
@@ -58,7 +55,6 @@ public class HttpClient {
 
 	public HttpClient(ConnectionFactory pcf) {
 		cf = pcf;
-		log = Logger.getLogger(getClass());
 	}
 
 	public StringBuffer doGet(String url, Hashtable args) throws Exception {
@@ -91,24 +87,18 @@ public class HttpClient {
 				return null;
 			}
 			ConnectionDescriptor connd = cf.getConnection(url);
-			String transportTypeName = TransportInfo.getTransportTypeName(connd.getTransportDescriptor().getTransportType());
+			String transportTypeName = TransportInfo.getTransportTypeName(connd
+					.getTransportDescriptor().getTransportType());
 			conn = (HttpConnection) connd.getConnection();
-
-			log.info("HTTP-GET (" + transportTypeName + "):  " + conn.getURL());
 			int resCode = conn.getResponseCode();
 			String resMessage = conn.getResponseMessage();
-			log.info("HTTP-GET Response:  " + resCode + " " + resMessage);
-
 			switch (resCode) {
-
 			case HttpConnection.HTTP_OK: {
 				InputStream inputStream = conn.openInputStream();
 				int c;
-
 				while ((c = inputStream.read()) != -1) {
 					buffer.append((char) c);
 				}
-
 				inputStream.close();
 				break;
 			}
@@ -116,15 +106,12 @@ public class HttpClient {
 			case HttpConnection.HTTP_BAD_REQUEST: {
 				InputStream inputStream = conn.openInputStream();
 				int c;
-
 				while ((c = inputStream.read()) != -1) {
 					buffer.append((char) c);
 				}
-
 				inputStream.close();
 				break;
 			}
-
 			case HttpConnection.HTTP_TEMP_REDIRECT:
 			case HttpConnection.HTTP_MOVED_TEMP:
 			case HttpConnection.HTTP_MOVED_PERM: {
@@ -136,11 +123,6 @@ public class HttpClient {
 			default:
 				break;
 			}
-			log.info("HTTP-GET Body:  " + conn.getType() + "(" + buffer.length() + ")");
-			if ((conn.getType() != null) && conn.getType().trim().startsWith("text/javascript")) {
-				log.debug(buffer.toString());
-			}
-
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -151,7 +133,6 @@ public class HttpClient {
 				}
 			}
 		}
-
 		return buffer;
 	}
 
@@ -179,7 +160,8 @@ public class HttpClient {
 			}
 
 			ConnectionDescriptor connd = cf.getConnection(url);
-			String transportTypeName = TransportInfo.getTransportTypeName(connd.getTransportDescriptor().getTransportType());
+			String transportTypeName = TransportInfo.getTransportTypeName(connd
+					.getTransportDescriptor().getTransportType());
 			conn = (HttpConnection) connd.getConnection();
 
 			if (conn != null) {
@@ -187,8 +169,12 @@ public class HttpClient {
 					// post data
 					if (postData != null) {
 						conn.setRequestMethod(HttpConnection.POST);
-						conn.setRequestProperty(HttpProtocolConstants.HEADER_CONTENT_TYPE, postData.getContentType());
-						conn.setRequestProperty(HttpProtocolConstants.HEADER_CONTENT_LENGTH, String.valueOf(postData.size()));
+						conn.setRequestProperty(
+								HttpProtocolConstants.HEADER_CONTENT_TYPE,
+								postData.getContentType());
+						conn.setRequestProperty(
+								HttpProtocolConstants.HEADER_CONTENT_LENGTH,
+								String.valueOf(postData.size()));
 
 						os = conn.openOutputStream();
 						os.write(postData.getBytes());
@@ -199,13 +185,10 @@ public class HttpClient {
 
 				} catch (Throwable t) {
 					t.printStackTrace();
-					log.error("Throwable: " + t.getMessage());
 				}
 
-				log.info("HTTP-POST (" + transportTypeName + "):  " + conn.getURL());
 				int resCode = conn.getResponseCode();
 				String resMessage = conn.getResponseMessage();
-				log.info("HTTP-POST Response:  " + resCode + " " + resMessage);
 
 				switch (resCode) {
 
@@ -245,14 +228,12 @@ public class HttpClient {
 					break;
 				}
 			}
-			log.info("HTTP-POST Body:  " + conn.getType() + "(" + buffer.length() + ")");
-			if ((conn.getType() != null) && conn.getType().trim().startsWith("text/javascript")) {
-				log.debug(buffer.toString());
+			if ((conn.getType() != null)
+					&& conn.getType().trim().startsWith("text/javascript")) {
 			}
 
 		} catch (Throwable t) {
 			t.printStackTrace();
-			log.error("Throwable: " + t.getMessage());
 
 		} finally {
 			if (os != null) {
@@ -272,7 +253,9 @@ public class HttpClient {
 		return buffer;
 	}
 
-	public StringBuffer doPostMultipart(String url, Hashtable params, String name, String fileName, String fileType, byte[] payload) throws Exception {
+	public StringBuffer doPostMultipart(String url, Hashtable params,
+			String name, String fileName, String fileType, byte[] payload)
+			throws Exception {
 		HttpConnection conn = null;
 		OutputStream os = null;
 		StringBuffer buffer = new StringBuffer();
@@ -283,28 +266,32 @@ public class HttpClient {
 			}
 
 			ConnectionDescriptor connd = cf.getConnection(url);
-			String transportTypeName = TransportInfo.getTransportTypeName(connd.getTransportDescriptor().getTransportType());
+			String transportTypeName = TransportInfo.getTransportTypeName(connd
+					.getTransportDescriptor().getTransportType());
 			conn = (HttpConnection) connd.getConnection();
 
 			if (conn != null) {
 				try {
-					byte[] postBytes = getMultipartPostBytes(params, name, fileName, fileType, payload);
+					byte[] postBytes = getMultipartPostBytes(params, name,
+							fileName, fileType, payload);
 					conn.setRequestMethod(HttpConnection.POST);
-					conn.setRequestProperty(HttpProtocolConstants.HEADER_CONTENT_TYPE, HttpProtocolConstants.CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY);
-					conn.setRequestProperty(HttpProtocolConstants.HEADER_CONTENT_LENGTH, postBytes + "");
+					conn.setRequestProperty(
+							HttpProtocolConstants.HEADER_CONTENT_TYPE,
+							HttpProtocolConstants.CONTENT_TYPE_MULTIPART_FORM_DATA
+									+ "; boundary=" + BOUNDARY);
+					conn.setRequestProperty(
+							HttpProtocolConstants.HEADER_CONTENT_LENGTH,
+							postBytes + "");
 
 					os = conn.openOutputStream();
 					os.write(postBytes);
 
 				} catch (Throwable t) {
 					t.printStackTrace();
-					log.error("Throwable: " + t.getMessage());
 				}
 
-				log.info("HTTP-POST-MULTI (" + transportTypeName + "):  " + conn.getURL());
 				int resCode = conn.getResponseCode();
 				String resMessage = conn.getResponseMessage();
-				log.info("HTTP-POST-MULTI Response:  " + resCode + " " + resMessage);
 
 				switch (resCode) {
 
@@ -336,7 +323,8 @@ public class HttpClient {
 				case HttpConnection.HTTP_MOVED_TEMP:
 				case HttpConnection.HTTP_MOVED_PERM: {
 					url = conn.getHeaderField("Location");
-					buffer = doPostMultipart(url, params, name, fileName, fileType, payload);
+					buffer = doPostMultipart(url, params, name, fileName,
+							fileType, payload);
 					break;
 				}
 
@@ -344,14 +332,12 @@ public class HttpClient {
 					break;
 				}
 			}
-			log.info("HTTP-POST-MULTI Body:  " + conn.getType() + "(" + buffer.length() + ")");
-			if ((conn.getType() != null) && conn.getType().trim().startsWith("text/javascript")) {
-				log.debug(buffer.toString());
+			if ((conn.getType() != null)
+					&& conn.getType().trim().startsWith("text/javascript")) {
 			}
 
 		} catch (Throwable t) {
 			t.printStackTrace();
-			log.error("Throwable: " + t.getMessage());
 
 		} finally {
 			if (os != null) {
@@ -371,7 +357,8 @@ public class HttpClient {
 		return buffer;
 	}
 
-	protected byte[] getMultipartPostBytes(Hashtable params, String name, String fileName, String fileType, byte[] payload) {
+	protected byte[] getMultipartPostBytes(Hashtable params, String name,
+			String fileName, String fileType, byte[] payload) {
 		StringBuffer res = new StringBuffer(START_BOUNDARY);
 
 		Enumeration keys = params.keys();
@@ -379,10 +366,15 @@ public class HttpClient {
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
 			String value = (String) params.get(key);
-			res.append("Content-Disposition: form-data; name=\"").append(key).append("\"\r\n").append("\r\n").append(value).append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+			res.append("Content-Disposition: form-data; name=\"").append(key)
+					.append("\"\r\n").append("\r\n").append(value)
+					.append("\r\n").append("--").append(BOUNDARY)
+					.append("\r\n");
 		}
 
-		res.append("Content-Disposition: form-data; name=\"").append(name).append("\"; filename=\"").append(fileName).append("\"\r\n").append("Content-Type: ").append(fileType).append("\r\n\r\n");
+		res.append("Content-Disposition: form-data; name=\"").append(name)
+				.append("\"; filename=\"").append(fileName).append("\"\r\n")
+				.append("Content-Type: ").append(fileType).append("\r\n\r\n");
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {

@@ -38,6 +38,9 @@ import net.rim.device.api.io.transport.ConnectionFactory;
 import net.rim.device.api.io.transport.TransportInfo;
 import net.rim.device.api.ui.UiApplication;
 
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+import org.json.me.JSONTokener;
 import org.w3c.dom.Document;
 
 import com.blackberry.facebook.dao.FacebookAlbum;
@@ -72,10 +75,6 @@ import com.blackberry.facebook.inf.Tag;
 import com.blackberry.facebook.inf.User;
 import com.blackberry.facebook.inf.Video;
 import com.blackberry.facebook.inf.Work;
-import com.blackberry.util.json.JSONException;
-import com.blackberry.util.json.JSONObject;
-import com.blackberry.util.json.JSONTokener;
-import com.blackberry.util.log.Logger;
 import com.blackberry.util.network.HttpClient;
 import com.blackberry.util.network.LoggableConnectionFactory;
 import com.blackberry.util.ui.BrowserScreen;
@@ -86,7 +85,6 @@ public class Facebook {
 	protected static final String ACCESS_TOKEN_URL = "https://graph.facebook.com/oauth/access_token";
 	protected static final String LOADING = "Connecting to Facebook";
 
-	protected Logger log = Logger.getLogger(getClass());
 	protected HttpClient http;
 	protected ConnectionFactory cf;
 	protected LoggableConnectionFactory lcf;
@@ -755,10 +753,8 @@ public class Facebook {
 			boolean result = false;
 			String token = getAccessTokenFromUrl(pUrl);
 			if ((token == null) || token.trim().equals("")) {
-				log.info("Access Token not found.");
 				result = false;
 			} else {
-				log.info("Access Token found !!!");
 				setAccessToken(token);
 				dismiss();
 				result = true;
@@ -783,22 +779,15 @@ public class Facebook {
 					String jsGrant = "setTimeout(\"var evt_g = document.createEvent('MouseEvents'); evt_g.initEvent('click', true, true); document.getElementsByName('grant_clicked')[0].dispatchEvent(evt_g);\",3000);";
 
 					if ((pdoc.getElementById("login_form") != null)) {
-						log.info("AutoMode:  " + jsFillId);
 						pbf.executeScript(jsFillId);
-						log.info("AutoMode:  " + jsFillPwd);
 						pbf.executeScript(jsFillPwd);
-						log.info("AutoMode:  " + jsLogin);
 						pbf.executeScript(jsLogin);
 
 					} else if ((pdoc.getElementById("uiserver_form") != null)) {
-						log.info("AutoMode:  " + jsGrant);
 						pbf.executeScript(jsGrant);
-
 					} else {
-						log.error("AutoMode: Loaded document is an unknown page.");
 					}
 				} else {
-					log.error("AutoMode: Loaded document is null.");
 				}
 			}
 			return true;
@@ -875,16 +864,6 @@ public class Facebook {
 
 			return at;
 		}
-
-		protected void logBrowserFieldRequest(BrowserFieldRequest request) {
-			log.debug("###############################################################################");
-			log.debug("###########  BrowserFieldRequest");
-			log.debug("###########  Protocol = " + request.getProtocol());
-			log.debug("###########  URL = " + request.getURL());
-			log.debug("###########  Post Data = " + request.getPostData());
-			log.debug("###############################################################################");
-		}
-
 	}
 
 	public boolean logout() {
@@ -934,10 +913,8 @@ public class Facebook {
 		protected boolean hasLogoutStatus(String pUrl) {
 			boolean result = false;
 			if (!checkLogoutStatusFromUrl(pUrl)) {
-				log.info("Logout status not found.");
 				result = false;
 			} else {
-				log.info("Logout status found !!!");
 				loggedOut = true;
 				dismiss();
 				result = true;

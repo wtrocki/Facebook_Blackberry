@@ -29,8 +29,8 @@
  */
 package com.blackberry.util.xml;
 
-import com.blackberry.util.json.JSONException;
-import com.blackberry.util.json.JSONTokener;
+import org.json.me.JSONException;
+import org.json.me.JSONTokener;
 
 /**
  * The XMLTokener extends the JSONTokener to provide additional methods for the parsing of XML texts.

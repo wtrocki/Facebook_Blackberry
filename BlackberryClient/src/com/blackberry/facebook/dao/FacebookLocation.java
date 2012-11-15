@@ -29,10 +29,11 @@
  */
 package com.blackberry.facebook.dao;
 
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.Location;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookLocation extends FacebookObject implements Location {
 

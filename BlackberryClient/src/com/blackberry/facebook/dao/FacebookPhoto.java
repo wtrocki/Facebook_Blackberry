@@ -34,6 +34,9 @@ import java.util.Hashtable;
 
 import net.rim.device.api.system.Bitmap;
 
+import org.json.me.JSONArray;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
@@ -42,8 +45,6 @@ import com.blackberry.facebook.inf.Photo;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.facebook.inf.Tag;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONArray;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookPhoto extends FacebookObject implements Photo {
 

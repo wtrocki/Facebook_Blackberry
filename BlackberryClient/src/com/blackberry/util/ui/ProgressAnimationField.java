@@ -29,8 +29,10 @@
  */
 package com.blackberry.util.ui;
 
-import net.rim.device.api.system.*;
-import net.rim.device.api.ui.*;
+import net.rim.device.api.system.Application;
+import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.Graphics;
 
 public class ProgressAnimationField extends Field implements Runnable {
 	private Bitmap _bitmap;

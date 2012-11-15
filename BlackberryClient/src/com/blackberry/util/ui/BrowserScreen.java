@@ -53,16 +53,13 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
-
 import org.w3c.dom.Document;
 
-import com.blackberry.util.log.Logger;
-import com.blackberry.util.string.StringUtils;
+import com.blackberry.util.xml.StringUtils;
 
-public class BrowserScreen extends MainScreen implements BrowserFieldNavigationRequestHandler, BrowserFieldResourceRequestHandler {
-
-	protected Logger log = Logger.getLogger(getClass());
-
+public class BrowserScreen extends MainScreen implements
+		BrowserFieldNavigationRequestHandler,
+		BrowserFieldResourceRequestHandler {
 	protected String url;
 	protected ConnectionFactory cf;
 	protected String loadingText;
@@ -90,9 +87,12 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 		bfc.setProperty(BrowserFieldConfig.ALLOW_CS_XHR, Boolean.TRUE);
 		bfc.setProperty(BrowserFieldConfig.JAVASCRIPT_ENABLED, Boolean.TRUE);
 		bfc.setProperty(BrowserFieldConfig.USER_SCALABLE, Boolean.TRUE);
-		bfc.setProperty(BrowserFieldConfig.MDS_TRANSCODING_ENABLED, Boolean.FALSE);
-		bfc.setProperty(BrowserFieldConfig.NAVIGATION_MODE, BrowserFieldConfig.NAVIGATION_MODE_POINTER);
-		bfc.setProperty(BrowserFieldConfig.VIEWPORT_WIDTH, new Integer(Display.getWidth()));
+		bfc.setProperty(BrowserFieldConfig.MDS_TRANSCODING_ENABLED,
+				Boolean.FALSE);
+		bfc.setProperty(BrowserFieldConfig.NAVIGATION_MODE,
+				BrowserFieldConfig.NAVIGATION_MODE_POINTER);
+		bfc.setProperty(BrowserFieldConfig.VIEWPORT_WIDTH,
+				new Integer(Display.getWidth()));
 		bfc.setProperty(BrowserFieldConfig.CONNECTION_FACTORY, cf);
 
 		bf = new BrowserField(bfc);
@@ -100,20 +100,27 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 		listener = new MyBrowserFieldListener();
 		bf.addListener(listener);
 
-		((ProtocolController) bf.getController()).setNavigationRequestHandler("http", this);
-		((ProtocolController) bf.getController()).setResourceRequestHandler("http", this);
-		((ProtocolController) bf.getController()).setNavigationRequestHandler("https", this);
-		((ProtocolController) bf.getController()).setResourceRequestHandler("https", this);
+		((ProtocolController) bf.getController()).setNavigationRequestHandler(
+				"http", this);
+		((ProtocolController) bf.getController()).setResourceRequestHandler(
+				"http", this);
+		((ProtocolController) bf.getController()).setNavigationRequestHandler(
+				"https", this);
+		((ProtocolController) bf.getController()).setResourceRequestHandler(
+				"https", this);
 
 		// Init Screen
 		attachTransition(TransitionContext.TRANSITION_FADE);
-		getMainManager().setBackground(BackgroundFactory.createSolidBackground(Color.WHITE));
+		getMainManager().setBackground(
+				BackgroundFactory.createSolidBackground(Color.WHITE));
 
 		hfm1 = new EvenlySpacedHorizontalFieldManager(USE_ALL_WIDTH);
 		hfm1.add(new LabelField("\n" + loadingText));
 
 		hfm2 = new EvenlySpacedHorizontalFieldManager(USE_ALL_WIDTH);
-		spinner = new ProgressAnimationField(Bitmap.getBitmapResource("spinner2.png"), 6, Field.FIELD_HCENTER);
+		spinner = new ProgressAnimationField(
+				Bitmap.getBitmapResource("spinner2.png"), 6,
+				Field.FIELD_HCENTER);
 		spinner.setMargin(15, 15, 15, 15);
 		hfm2.add(spinner);
 
@@ -128,36 +135,38 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 	protected void showContent() {
 		try {
 			if (vfm.getScreen() != null) {
-				synchronized (net.rim.device.api.system.Application.getEventLock()) {
+				synchronized (net.rim.device.api.system.Application
+						.getEventLock()) {
 					delete(vfm);
 				}
 			}
 			if (bf.getScreen() == null) {
-				synchronized (net.rim.device.api.system.Application.getEventLock()) {
+				synchronized (net.rim.device.api.system.Application
+						.getEventLock()) {
 					add(bf);
 				}
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
-			log.error("Throwable:  " + t.getMessage());
 		}
 	}
 
 	protected void showLoading() {
 		try {
 			if (vfm.getScreen() == null) {
-				synchronized (net.rim.device.api.system.Application.getEventLock()) {
+				synchronized (net.rim.device.api.system.Application
+						.getEventLock()) {
 					add(vfm);
 				}
 			}
 			if (bf.getScreen() != null) {
-				synchronized (net.rim.device.api.system.Application.getEventLock()) {
+				synchronized (net.rim.device.api.system.Application
+						.getEventLock()) {
 					delete(bf);
 				}
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
-			log.error("Throwable:  " + t.getMessage());
 		}
 	}
 
@@ -186,7 +195,6 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 	}
 
 	public void handleNavigation(BrowserFieldRequest request) throws Exception {
-		log.info("BF-Navigate: " + request.getURL());
 		if (shouldFetchContent(request)) {
 			// showLoading();
 			request.setURL(StringUtils.fixHttpsUrlPrefix(request.getURL()));
@@ -194,7 +202,8 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 		}
 	}
 
-	public InputConnection handleResource(BrowserFieldRequest request) throws Exception {
+	public InputConnection handleResource(BrowserFieldRequest request)
+			throws Exception {
 		InputConnection conn = bf.getConnectionManager().makeRequest(request);
 
 		if ((conn != null) && (conn instanceof HttpConnection)) {
@@ -233,34 +242,13 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 
 	protected class MyBrowserFieldListener extends BrowserFieldListener {
 
-		public void documentLoaded(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DocumentLoaded(): " + document.getDocumentURI());
+		public void documentLoaded(BrowserField browserField, Document document)
+				throws Exception {
 			if (shouldShowContent(browserField, document)) {
 				showContent();
 			}
 			postProcessing(browserField, document);
 		}
-
-		public void documentAborted(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DocumentAborted(): " + document.getDocumentURI());
-		}
-
-		public void documentCreated(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DocumentCreated(): " + document.getDocumentURI());
-		}
-
-		public void documentError(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DocumentError(): " + document.getDocumentURI());
-		}
-
-		public void documentUnloading(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DocumentUnloading(): " + document.getDocumentURI());
-		}
-
-		public void downloadProgress(BrowserField browserField, Document document) throws Exception {
-			log.info("BF-DownloadProgress(): " + document.getDocumentURI());
-		}
-
 	}
 
 	protected void attachTransition(int transitionType) {
@@ -271,49 +259,64 @@ public class BrowserScreen extends MainScreen implements BrowserFieldNavigationR
 		switch (transitionType) {
 
 		case TransitionContext.TRANSITION_FADE:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_FADE);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_FADE);
 			popAction = new TransitionContext(TransitionContext.TRANSITION_FADE);
 			pushAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
 			popAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
 			break;
 
 		case TransitionContext.TRANSITION_NONE:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_NONE);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_NONE);
 			popAction = new TransitionContext(TransitionContext.TRANSITION_NONE);
 			break;
 
 		case TransitionContext.TRANSITION_SLIDE:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_SLIDE);
-			popAction = new TransitionContext(TransitionContext.TRANSITION_SLIDE);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_SLIDE);
+			popAction = new TransitionContext(
+					TransitionContext.TRANSITION_SLIDE);
 			pushAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
-			pushAction.setIntAttribute(TransitionContext.ATTR_DIRECTION, TransitionContext.DIRECTION_LEFT);
+			pushAction.setIntAttribute(TransitionContext.ATTR_DIRECTION,
+					TransitionContext.DIRECTION_LEFT);
 			popAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
-			popAction.setIntAttribute(TransitionContext.ATTR_DIRECTION, TransitionContext.DIRECTION_RIGHT);
+			popAction.setIntAttribute(TransitionContext.ATTR_DIRECTION,
+					TransitionContext.DIRECTION_RIGHT);
 			break;
 
 		case TransitionContext.TRANSITION_WIPE:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_WIPE);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_WIPE);
 			popAction = new TransitionContext(TransitionContext.TRANSITION_WIPE);
 			pushAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
-			pushAction.setIntAttribute(TransitionContext.ATTR_DIRECTION, TransitionContext.DIRECTION_LEFT);
+			pushAction.setIntAttribute(TransitionContext.ATTR_DIRECTION,
+					TransitionContext.DIRECTION_LEFT);
 			popAction.setIntAttribute(TransitionContext.ATTR_DURATION, 300);
-			popAction.setIntAttribute(TransitionContext.ATTR_DIRECTION, TransitionContext.DIRECTION_RIGHT);
+			popAction.setIntAttribute(TransitionContext.ATTR_DIRECTION,
+					TransitionContext.DIRECTION_RIGHT);
 			break;
 
 		case TransitionContext.TRANSITION_ZOOM:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_ZOOM);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_ZOOM);
 			popAction = new TransitionContext(TransitionContext.TRANSITION_ZOOM);
-			pushAction.setIntAttribute(TransitionContext.ATTR_KIND, TransitionContext.KIND_IN);
-			popAction.setIntAttribute(TransitionContext.ATTR_KIND, TransitionContext.KIND_OUT);
+			pushAction.setIntAttribute(TransitionContext.ATTR_KIND,
+					TransitionContext.KIND_IN);
+			popAction.setIntAttribute(TransitionContext.ATTR_KIND,
+					TransitionContext.KIND_OUT);
 			break;
 
 		default:
-			pushAction = new TransitionContext(TransitionContext.TRANSITION_NONE);
+			pushAction = new TransitionContext(
+					TransitionContext.TRANSITION_NONE);
 			popAction = new TransitionContext(TransitionContext.TRANSITION_NONE);
 		}
 
-		engine.setTransition(null, this, UiEngineInstance.TRIGGER_PUSH, pushAction);
-		engine.setTransition(this, null, UiEngineInstance.TRIGGER_POP, popAction);
+		engine.setTransition(null, this, UiEngineInstance.TRIGGER_PUSH,
+				pushAction);
+		engine.setTransition(this, null, UiEngineInstance.TRIGGER_POP,
+				popAction);
 	}
 
 }

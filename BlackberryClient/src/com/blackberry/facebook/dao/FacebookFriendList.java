@@ -29,14 +29,15 @@
  */
 package com.blackberry.facebook.dao;
 
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.FriendList;
 import com.blackberry.facebook.inf.Profile;
-import com.blackberry.util.json.JSONArray;
-import com.blackberry.util.json.JSONException;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookFriendList extends FacebookObject implements FriendList {
 

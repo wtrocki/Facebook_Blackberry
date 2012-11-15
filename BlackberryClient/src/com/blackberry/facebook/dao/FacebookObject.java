@@ -29,9 +29,10 @@
  */
 package com.blackberry.facebook.dao;
 
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookObject implements com.blackberry.facebook.inf.Object {
 

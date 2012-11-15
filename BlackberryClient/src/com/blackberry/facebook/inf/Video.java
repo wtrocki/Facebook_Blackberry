@@ -31,9 +31,9 @@ package com.blackberry.facebook.inf;
 
 import java.util.Date;
 
-import com.blackberry.facebook.AsyncCallback;
-
 import net.rim.device.api.system.Bitmap;
+
+import com.blackberry.facebook.AsyncCallback;
 
 public interface Video extends com.blackberry.facebook.inf.Object {
 

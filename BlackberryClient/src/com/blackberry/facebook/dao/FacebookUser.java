@@ -35,6 +35,10 @@ import java.util.Hashtable;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
@@ -56,9 +60,6 @@ import com.blackberry.facebook.inf.User;
 import com.blackberry.facebook.inf.Video;
 import com.blackberry.facebook.inf.Work;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONArray;
-import com.blackberry.util.json.JSONException;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookUser extends FacebookObject implements User {
 

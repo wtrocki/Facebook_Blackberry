@@ -29,7 +29,8 @@
  */
 package com.blackberry.util.ui;
 
-import net.rim.device.api.ui.*;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.Manager;
 
 public class EvenlySpacedHorizontalFieldManager extends Manager {
 	private static final int SYSTEM_STYLE_SHIFT = 32;

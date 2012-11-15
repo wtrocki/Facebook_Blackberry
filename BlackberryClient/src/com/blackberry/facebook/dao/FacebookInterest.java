@@ -31,11 +31,12 @@ package com.blackberry.facebook.dao;
 
 import java.util.Date;
 
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.Interest;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookInterest extends FacebookObject implements Interest {
 

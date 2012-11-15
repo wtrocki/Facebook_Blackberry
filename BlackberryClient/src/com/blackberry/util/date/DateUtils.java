@@ -43,36 +43,6 @@ public final class DateUtils {
 	private DateUtils() {
 	}
 
-	//	public static Date toDateFromLongFormat(String date) {
-	//		Date parsedDate = toDateWithFormatString(date, FACEBOOK_LONG_DATE_FORMAT);
-	//		if (parsedDate == null) {
-	//			parsedDate = toDateWithFormatString(date, FACEBOOK_LONG_DATE_FORMAT_WITHOUT_TIMEZONE);
-	//		}
-	//		return parsedDate;
-	//	}
-	//
-	//	public static Date toDateFromShortFormat(String date) {
-	//		return toDateWithFormatString(date, FACEBOOK_SHORT_DATE_FORMAT);
-	//	}
-	//
-	//	public static Date toDateFromMonthYearFormat(String date) {
-	//		if ("0000-00".equals(date)) {
-	//			return null;
-	//		}
-	//		return toDateWithFormatString(date, FACEBOOK_MONTH_YEAR_DATE_FORMAT);
-	//	}
-
-	//	private static Date toDateWithFormatString(String date, String format) {
-	//		if (date == null) {
-	//			return null;
-	//		}
-	//		try {
-	//			return new SimpleDateFormat(format).parse(date);
-	//		} catch (Exception e) {
-	//			return null;
-	//		}
-	//	}
-
 	public static Date parse(String date) {
 		if (date == null) {
 			return null;

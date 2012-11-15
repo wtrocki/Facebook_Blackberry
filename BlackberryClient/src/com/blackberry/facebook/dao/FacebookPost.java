@@ -33,6 +33,9 @@ import java.util.Date;
 
 import net.rim.device.api.system.Bitmap;
 
+import org.json.me.JSONArray;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
@@ -40,8 +43,6 @@ import com.blackberry.facebook.inf.Comment;
 import com.blackberry.facebook.inf.Post;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONArray;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookPost extends FacebookObject implements Post {
 

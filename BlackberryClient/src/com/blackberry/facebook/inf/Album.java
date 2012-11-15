@@ -31,10 +31,10 @@ package com.blackberry.facebook.inf;
 
 import java.util.Date;
 
-import com.blackberry.facebook.AsyncCallback;
-
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
+
+import com.blackberry.facebook.AsyncCallback;
 
 public interface Album extends com.blackberry.facebook.inf.Object {
 

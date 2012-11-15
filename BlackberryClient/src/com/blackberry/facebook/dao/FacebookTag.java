@@ -31,13 +31,14 @@ package com.blackberry.facebook.dao;
 
 import java.util.Date;
 
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 import com.blackberry.facebook.inf.Profile;
 import com.blackberry.facebook.inf.Tag;
 import com.blackberry.util.date.DateUtils;
-import com.blackberry.util.json.JSONException;
-import com.blackberry.util.json.JSONObject;
 
 public class FacebookTag extends FacebookObject implements Tag {
 
