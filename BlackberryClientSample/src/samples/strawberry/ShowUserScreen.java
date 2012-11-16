@@ -12,7 +12,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import com.blackberry.facebook.BasicAsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
-import com.blackberry.facebook.inf.User;
+import com.blackberry.facebook.objects.User;
 
 public class ShowUserScreen extends MainScreen {
 
@@ -80,7 +80,7 @@ public class ShowUserScreen extends MainScreen {
 			fb.getUser(pUserId, new BasicAsyncCallback() {
 
 				public void onComplete(
-						com.blackberry.facebook.inf.Object[] objects,
+						com.blackberry.facebook.objects.Object[] objects,
 						final java.lang.Object state) {
 					user = (User) objects[0];
 					UiApplication.getApplication().invokeLater(new Runnable() {
