@@ -17,10 +17,8 @@ import com.blackberry.facebook.inf.User;
 public class ShowUserScreen extends MainScreen {
 
 	protected ButtonField tryAgainButton = null;
-	protected ButtonField homeButton = null;
 	protected VerticalFieldManager vfm1 = null;
 	protected VerticalFieldManager vfm2 = null;
-	protected VerticalFieldManager vfm3 = null;
 	protected Facebook fb;
 	protected User user;
 
@@ -40,23 +38,12 @@ public class ShowUserScreen extends MainScreen {
 				return true;
 			}
 		};
-
-		homeButton = new ButtonField("Show Home") {
-			protected boolean invokeAction(int action) {
-				UiApplication.getUiApplication().pushScreen(
-						new ShowHomeScreen(fb, user));
-				return true;
-			}
-		};
-
 		setTitle(new LabelField("Loading...", LabelField.ELLIPSIS
 				| LabelField.USE_ALL_WIDTH));
 
 		vfm1 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
 		vfm1.add(tryAgainButton);
 		vfm2 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
-		vfm3 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
-		vfm3.add(homeButton);
 
 		showUserAsync(pUserId);
 	}
@@ -74,7 +61,6 @@ public class ShowUserScreen extends MainScreen {
 			vfm2.add(new LabelField("updated_time = "
 					+ user.getUpdatedTimeAsString()));
 			add(vfm2);
-			add(vfm3);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,11 +113,9 @@ public class ShowUserScreen extends MainScreen {
 							vfm2.add(new LabelField("Exception: "
 									+ e.getMessage()));
 							add(vfm1);
-							delete(vfm3);
 						}
 					});
 				}
-
 			}, null);
 
 		} catch (FacebookException e) {
@@ -147,8 +131,6 @@ public class ShowUserScreen extends MainScreen {
 		vfm2.add(new LabelField("birthday = ..."));
 		vfm2.add(new LabelField("updated_time = ..."));
 		add(vfm2);
-		add(vfm3);
-
 	}
 
 	protected boolean onSavePrompt() {
