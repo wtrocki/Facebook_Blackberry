@@ -219,7 +219,6 @@ public class BrowserScreen extends MainScreen implements
 			if (shouldShowContent(browserField, document)) {
 				showContent();
 			}
-			postProcessing(browserField, document);
 		}
 	}
 

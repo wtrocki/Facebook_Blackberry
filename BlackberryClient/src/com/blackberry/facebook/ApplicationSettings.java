@@ -30,21 +30,12 @@ public class ApplicationSettings {
 		applicationId = pApplicationId;
 	}
 
-	public String getApplicationSecret() {
-		return applicationSecret;
-	}
-
-	public void setApplicationSecret(String pApplicationSecret) {
-		applicationSecret = pApplicationSecret;
-	}
-
 	public String[] getPermissions() {
 		return permissions;
 	}
 
 	public String getPermissionsString() {
 		String result = "";
-
 		if ((permissions != null) && (permissions.length > 0)) {
 			for (int i = 0; i < permissions.length; i++) {
 				if (i != 0) {

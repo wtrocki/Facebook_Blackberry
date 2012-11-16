@@ -39,13 +39,9 @@ public class Facebook {
 			TransportInfo.TRANSPORT_MDS, TransportInfo.TRANSPORT_WAP };
 
 	protected ApplicationSettings appSettings;
+	protected Object ACCESS_TOKEN_LOCK = new Object();
 	protected String accessToken;
 	private String accessTokenExpireDate;
-	protected Object ACCESS_TOKEN_LOCK = new Object();
-
-	protected String id = "";
-	protected String pwd = "";
-	protected boolean autoMode = false;
 
 	public static class ProfileTypes {
 		public static final int USER = 1;
@@ -68,15 +64,6 @@ public class Facebook {
 		http = new HttpClient(cf);
 	}
 
-	public void setAutoMode(boolean pAutoMode, String pId, String pPwd) {
-		autoMode = pAutoMode;
-		id = pId;
-		pwd = pPwd;
-	}
-
-	public boolean isAutoMode() {
-		return autoMode;
-	}
 
 	public void setPermissions(String[] pPerms) {
 		appSettings.setPermissions(pPerms);
@@ -340,47 +327,6 @@ public class Facebook {
 		}
 		return result;
 	}
-
-	public JSONObject delete(String path, boolean retry)
-			throws FacebookException {
-		if (!hasAccessToken()) {
-			refreshAccessToken(false);
-		}
-
-		JSONObject result = null;
-
-		Hashtable data = new Hashtable();
-		data.put("access_token", accessToken);
-		data.put("format", "JSON");
-		data.put("method", "delete");
-
-		try {
-			StringBuffer responseBuffer = checkResponse(http.doPost(GRAPH_URL
-					+ '/' + path, data));
-
-			if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
-				return null;
-			}
-
-			result = new JSONObject(new JSONTokener(responseBuffer.toString()));
-
-		} catch (OAuthException e) {
-			if (retry) {
-				refreshAccessToken(true);
-				result = delete(path, false);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FacebookException(e.getMessage());
-
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new FacebookException(t.getMessage());
-		}
-		return result;
-	}
-
 	public User getCurrentUser(final AsyncCallback listener)
 			throws FacebookException {
 		return getUser("me", listener, null);
@@ -535,31 +481,6 @@ public class Facebook {
 
 		protected boolean shouldShowContent(BrowserField pbf, Document pdoc) {
 			return !hasAccessToken(pdoc.getDocumentURI());
-		}
-
-		protected boolean postProcessing(BrowserField pbf, Document pdoc) {
-			if (isAutoMode()) {
-				if ((pdoc != null)) {
-					String jsFillId = "document.forms['login_form'].elements['email'].value = '"
-							+ id + "';";
-					String jsFillPwd = "document.forms['login_form'].elements['pass'].value = '"
-							+ pwd + "';";
-					String jsLogin = "setTimeout(\"var evt_l = document.createEvent('MouseEvents'); evt_l.initEvent('click', true, true); document.forms['login_form'].elements['login'].dispatchEvent(evt_l);\",3000);";
-					String jsGrant = "setTimeout(\"var evt_g = document.createEvent('MouseEvents'); evt_g.initEvent('click', true, true); document.getElementsByName('grant_clicked')[0].dispatchEvent(evt_g);\",3000);";
-
-					if ((pdoc.getElementById("login_form") != null)) {
-						pbf.executeScript(jsFillId);
-						pbf.executeScript(jsFillPwd);
-						pbf.executeScript(jsLogin);
-
-					} else if ((pdoc.getElementById("uiserver_form") != null)) {
-						pbf.executeScript(jsGrant);
-					} else {
-					}
-				} else {
-				}
-			}
-			return true;
 		}
 
 		protected String getAccessTokenFromUrl(String url) {
