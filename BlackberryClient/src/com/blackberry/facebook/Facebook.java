@@ -18,7 +18,6 @@ import org.json.me.JSONTokener;
 import org.w3c.dom.Document;
 
 import com.blackberry.facebook.objects.FacebookUser;
-import com.blackberry.facebook.objects.Profile;
 import com.blackberry.facebook.objects.User;
 import com.blackberry.facebook.ui.BrowserScreen;
 import com.blackberry.facebook.util.HttpClient;
@@ -334,15 +333,6 @@ public class Facebook {
 
 	public User getCurrentUser() throws FacebookException {
 		return getUser("me", null, null);
-	}
-
-	public User getUser(final Profile pProfile, final AsyncCallback listener)
-			throws FacebookException {
-		return getUser(pProfile.getId(), listener, null);
-	}
-
-	public User getUser(Profile pProfile) throws FacebookException {
-		return getUser(pProfile.getId());
 	}
 
 	public User getUser(String pId) throws FacebookException {
