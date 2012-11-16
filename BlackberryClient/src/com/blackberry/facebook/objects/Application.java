@@ -3,11 +3,11 @@
  *******************************************************************************/
 /*******************************************************************************
  *******************************************************************************/
-package com.blackberry.facebook.inf;
+package com.blackberry.facebook.objects;
 
 import net.rim.device.api.system.Bitmap;
 
-public interface Application extends com.blackberry.facebook.inf.Object {
+public interface Application extends com.blackberry.facebook.objects.Object {
 
 	// Properties
 

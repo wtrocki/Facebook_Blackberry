@@ -1,7 +1,7 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.util;
+package com.blackberry.facebook.util;
 
 import java.util.Vector;
 

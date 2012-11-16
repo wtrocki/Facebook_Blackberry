@@ -17,11 +17,11 @@ import org.json.me.JSONObject;
 import org.json.me.JSONTokener;
 import org.w3c.dom.Document;
 
-import com.blackberry.facebook.dao.FacebookUser;
-import com.blackberry.facebook.inf.Profile;
-import com.blackberry.facebook.inf.User;
-import com.blackberry.util.HttpClient;
-import com.blackberry.util.ui.BrowserScreen;
+import com.blackberry.facebook.objects.FacebookUser;
+import com.blackberry.facebook.objects.Profile;
+import com.blackberry.facebook.objects.User;
+import com.blackberry.facebook.ui.BrowserScreen;
+import com.blackberry.facebook.util.HttpClient;
 
 public class Facebook {
 

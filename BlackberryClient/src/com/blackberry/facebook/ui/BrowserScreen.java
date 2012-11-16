@@ -1,7 +1,7 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.util.ui;
+package com.blackberry.facebook.ui;
 
 import javax.microedition.io.HttpConnection;
 import javax.microedition.io.HttpsConnection;
@@ -30,7 +30,7 @@ import net.rim.device.api.ui.decor.BackgroundFactory;
 
 import org.w3c.dom.Document;
 
-import com.blackberry.util.StringUtils;
+import com.blackberry.facebook.util.StringUtils;
 
 public class BrowserScreen extends MainScreen implements
 		BrowserFieldNavigationRequestHandler,

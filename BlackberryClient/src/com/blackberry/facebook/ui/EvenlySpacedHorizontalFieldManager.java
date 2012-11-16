@@ -1,7 +1,7 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.util.ui;
+package com.blackberry.facebook.ui;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;

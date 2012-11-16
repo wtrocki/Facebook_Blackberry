@@ -6,7 +6,7 @@ import net.rim.device.api.system.Bitmap;
 
 public class BasicAsyncCallback implements AsyncCallback {
 
-	public void onComplete(com.blackberry.facebook.inf.Object[] values, java.lang.Object state) {
+	public void onComplete(com.blackberry.facebook.objects.Object[] values, java.lang.Object state) {
 	}
 
 	public void onComplete(String[] values, java.lang.Object state) {

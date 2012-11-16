@@ -3,14 +3,13 @@
  *******************************************************************************/
 /*******************************************************************************
  *******************************************************************************/
-package com.blackberry.facebook.dao;
+package com.blackberry.facebook.objects;
 
 import org.json.me.JSONObject;
 
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
-import com.blackberry.facebook.inf.Profile;
 
 public class FacebookProfile extends FacebookObject implements Profile {
 
@@ -39,17 +38,17 @@ public class FacebookProfile extends FacebookObject implements Profile {
 		}
 	}
 
-	public com.blackberry.facebook.inf.Object toObject() {
+	public com.blackberry.facebook.objects.Object toObject() {
 		return toObject(null, null);
 	}
 
-	public com.blackberry.facebook.inf.Object toObject(
+	public com.blackberry.facebook.objects.Object toObject(
 			final AsyncCallback listener, final java.lang.Object state) {
 		if (listener != null) {
 			new java.lang.Thread() {
 				public void run() {
 					try {
-						com.blackberry.facebook.inf.Object[] result = new com.blackberry.facebook.inf.Object[1];
+						com.blackberry.facebook.objects.Object[] result = new com.blackberry.facebook.objects.Object[1];
 						result[0] = toObject();
 						try {
 							listener.onComplete(result, state);
@@ -64,7 +63,7 @@ public class FacebookProfile extends FacebookObject implements Profile {
 			return null;
 
 		} else {
-			com.blackberry.facebook.inf.Object result = null;
+			com.blackberry.facebook.objects.Object result = null;
 			try {
 				int profileType = getProfileType();
 				if (profileType == Facebook.ProfileTypes.USER) {
