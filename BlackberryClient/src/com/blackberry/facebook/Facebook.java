@@ -502,7 +502,6 @@ public class Facebook {
 			}
 			return at;
 		}
-
 		protected String getAccessTokenFromCode(String pCode) {
 			String at = null;
 
