@@ -488,7 +488,7 @@ public class Facebook {
 		private String getExpireDate(String tokenUrl) {
 			String at = null;
 			if ((tokenUrl != null) && !tokenUrl.trim().equals("")) {
-				int startIndex = tokenUrl.indexOf("#expires_in=");
+				int startIndex = tokenUrl.indexOf("&expires_in=");
 				if (startIndex > -1) {
 					startIndex++;
 					int stopIndex = tokenUrl.length();
