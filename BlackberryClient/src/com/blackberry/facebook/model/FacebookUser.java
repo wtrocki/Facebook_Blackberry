@@ -1,7 +1,7 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.facebook.dao;
+package com.blackberry.facebook.model;
 
 import java.util.Hashtable;
 
@@ -13,11 +13,11 @@ import org.json.me.JSONObject;
 import com.blackberry.facebook.AsyncCallback;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
-import com.blackberry.facebook.inf.User;
 
-public class FacebookUser extends FacebookObject implements User {
+public class FacebookUser extends FacebookObject implements IUser {
 
-	public FacebookUser(Facebook pfb, JSONObject pJsonObject) throws FacebookException {
+	public FacebookUser(Facebook pfb, JSONObject pJsonObject)
+			throws FacebookException {
 		super(pfb, pJsonObject);
 	}
 
@@ -122,16 +122,21 @@ public class FacebookUser extends FacebookObject implements User {
 	public String getWebsite() {
 		return jsonObject.optString("website");
 	}
-	
+
 	// Connections
-	public Bitmap getPicture(final int pPictureType, final AsyncCallback listener, final java.lang.Object state) {
+	public Bitmap getPicture(final int pPictureType,
+			final AsyncCallback listener, final java.lang.Object state) {
 		if (listener != null) {
 			new java.lang.Thread() {
 				public void run() {
 					try {
 						Bitmap[] result = new Bitmap[1];
 						result[0] = getPicture(pPictureType);
-						try {listener.onComplete(result, state);} catch (Throwable t) {t.printStackTrace();}
+						try {
+							listener.onComplete(result, state);
+						} catch (Throwable t) {
+							t.printStackTrace();
+						}
 					} catch (Exception e) {
 						listener.onException(e, state);
 					}
@@ -147,13 +152,13 @@ public class FacebookUser extends FacebookObject implements User {
 			try {
 				path = getId() + "/picture";
 				params = new Hashtable();
-				if ((pPictureType == Facebook.PictureTypes.SMALL)) {
+				if ((pPictureType == PictureTypes.SMALL)) {
 					params.put("type", "small");
-				} else if ((pPictureType == Facebook.PictureTypes.NORMAL)) {
+				} else if ((pPictureType == PictureTypes.NORMAL)) {
 					params.put("type", "normal");
-				} else if ((pPictureType == Facebook.PictureTypes.LARGE)) {
+				} else if ((pPictureType == PictureTypes.LARGE)) {
 					params.put("type", "large");
-				} else if ((pPictureType == Facebook.PictureTypes.SQUARE)) {
+				} else if ((pPictureType == PictureTypes.SQUARE)) {
 					params.put("type", "square");
 				} else {
 					params.put("type", "normal");
@@ -161,9 +166,9 @@ public class FacebookUser extends FacebookObject implements User {
 
 				byte[] data = fb.readRaw(path, params, true, true);
 				if ((data != null) && (data.length > 0)) {
-					result = Bitmap.createBitmapFromBytes(data, 0, data.length, 1);
+					result = Bitmap.createBitmapFromBytes(data, 0, data.length,
+							1);
 				}
-
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}
@@ -174,11 +179,4 @@ public class FacebookUser extends FacebookObject implements User {
 	public Bitmap getPicture(int pPictureType) {
 		return getPicture(pPictureType, null, null);
 	}
-
-	public Thread[] getInbox() {
-		// TODO
-		return null;
-	}
-
-
 }

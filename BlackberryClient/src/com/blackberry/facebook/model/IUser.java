@@ -1,13 +1,13 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.facebook.inf;
+package com.blackberry.facebook.model;
 
 import net.rim.device.api.system.Bitmap;
 
 import com.blackberry.facebook.AsyncCallback;
 
-public interface User extends com.blackberry.facebook.inf.Object {
+public interface IUser extends IObject {
 
 	public String getName();
 

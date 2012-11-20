@@ -9,20 +9,19 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.blackberry.facebook.BasicAsyncCallback;
+import com.blackberry.facebook.AsyncCallbackAdapter;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
-import com.blackberry.facebook.inf.User;
+import com.blackberry.facebook.model.IUser;
 
 public class ShowUserScreen extends MainScreen {
 
 	protected ButtonField tryAgainButton = null;
-	protected ButtonField homeButton = null;
 	protected VerticalFieldManager vfm1 = null;
 	protected VerticalFieldManager vfm2 = null;
 	protected VerticalFieldManager vfm3 = null;
 	protected Facebook fb;
-	protected User user;
+	protected IUser user;
 
 	public ShowUserScreen(Facebook pfb) {
 		this(pfb, "me");
@@ -41,14 +40,6 @@ public class ShowUserScreen extends MainScreen {
 			}
 		};
 
-		homeButton = new ButtonField("Show Home") {
-			protected boolean invokeAction(int action) {
-				UiApplication.getUiApplication().pushScreen(
-						new ShowHomeScreen(fb, user));
-				return true;
-			}
-		};
-
 		setTitle(new LabelField("Loading...", LabelField.ELLIPSIS
 				| LabelField.USE_ALL_WIDTH));
 
@@ -56,8 +47,6 @@ public class ShowUserScreen extends MainScreen {
 		vfm1.add(tryAgainButton);
 		vfm2 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
 		vfm3 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
-		vfm3.add(homeButton);
-
 		showUserAsync(pUserId);
 	}
 
@@ -91,12 +80,12 @@ public class ShowUserScreen extends MainScreen {
 
 	public void showUserAsync(String pUserId) {
 		try {
-			fb.getUser(pUserId, new BasicAsyncCallback() {
+			fb.getUser(pUserId, new AsyncCallbackAdapter() {
 
 				public void onComplete(
-						com.blackberry.facebook.inf.Object[] objects,
+						com.blackberry.facebook.model.IObject[] objects,
 						final java.lang.Object state) {
-					user = (User) objects[0];
+					user = (IUser) objects[0];
 					UiApplication.getApplication().invokeLater(new Runnable() {
 						public void run() {
 							setTitle(new LabelField("Hello " + user.getName()

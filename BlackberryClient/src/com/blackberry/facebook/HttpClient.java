@@ -1,7 +1,7 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-package com.blackberry.util;
+package com.blackberry.facebook;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -1,23 +1,23 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-/*******************************************************************************
- *******************************************************************************/
-package com.blackberry.facebook.dao;
+package com.blackberry.facebook.model;
 
 import org.json.me.JSONObject;
 
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.FacebookException;
 
-public class FacebookObject implements com.blackberry.facebook.inf.Object {
+public class FacebookObject implements com.blackberry.facebook.model.IObject {
 
 	protected Facebook fb;
 	protected JSONObject jsonObject;
 
-	public FacebookObject(Facebook pfb, JSONObject pJsonObject) throws FacebookException {
+	public FacebookObject(Facebook pfb, JSONObject pJsonObject)
+			throws FacebookException {
 		if ((pfb == null) || (pJsonObject == null)) {
-			throw new FacebookException("Unable to create Facebook FacebookObject.");
+			throw new FacebookException(
+					"Unable to create Facebook FacebookObject.");
 		}
 		fb = pfb;
 		jsonObject = pJsonObject;

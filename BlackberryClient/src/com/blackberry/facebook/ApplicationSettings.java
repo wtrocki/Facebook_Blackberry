@@ -53,7 +53,6 @@ public class ApplicationSettings {
 				result += permissions[i].trim();
 			}
 		}
-
 		return result;
 	}
 

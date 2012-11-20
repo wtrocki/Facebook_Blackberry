@@ -17,40 +17,21 @@ import org.json.me.JSONObject;
 import org.json.me.JSONTokener;
 import org.w3c.dom.Document;
 
-import com.blackberry.facebook.dao.FacebookUser;
-import com.blackberry.facebook.inf.Profile;
-import com.blackberry.facebook.inf.User;
-import com.blackberry.util.HttpClient;
-import com.blackberry.util.ui.BrowserScreen;
+import com.blackberry.facebook.model.FacebookUser;
+import com.blackberry.facebook.model.IUser;
 
 public class Facebook {
 
 	protected static final String GRAPH_URL = "https://graph.facebook.com";
 	protected static final String ACCESS_TOKEN_URL = "https://graph.facebook.com/oauth/access_token";
-	protected static final String LOADING = "Connecting to Facebook";
 
 	protected HttpClient http;
-	protected ConnectionFactory cf;
 	protected ConnectionFactory lcf;
-	protected int[] preferredTransportTypes = {
-			TransportInfo.TRANSPORT_TCP_WIFI,
-			TransportInfo.TRANSPORT_TCP_CELLULAR, TransportInfo.TRANSPORT_WAP2 };
-	protected int[] disallowedTransportTypes = { TransportInfo.TRANSPORT_BIS_B,
-			TransportInfo.TRANSPORT_MDS, TransportInfo.TRANSPORT_WAP };
 
 	protected ApplicationSettings appSettings;
 	protected String accessToken;
 	private String accessTokenExpireDate;
 	protected Object ACCESS_TOKEN_LOCK = new Object();
-
-	protected String id = "";
-	protected String pwd = "";
-	protected boolean autoMode = false;
-
-	public static class ProfileTypes {
-		public static final int USER = 1;
-		public static final int PAGE = 2;
-	}
 
 	public static Facebook getInstance(ApplicationSettings pAppSettings) {
 		return new Facebook(pAppSettings);
@@ -58,24 +39,18 @@ public class Facebook {
 
 	protected Facebook(ApplicationSettings pAppSettings) {
 		appSettings = pAppSettings;
-		cf = new ConnectionFactory();
-		cf.setPreferredTransportTypes(preferredTransportTypes);
-		cf.setDisallowedTransportTypes(disallowedTransportTypes);
+		int[] preferredTransportTypes = { TransportInfo.TRANSPORT_TCP_WIFI,
+				TransportInfo.TRANSPORT_TCP_CELLULAR,
+				TransportInfo.TRANSPORT_WAP2 };
+		int[] disallowedTransportTypes = { TransportInfo.TRANSPORT_BIS_B,
+				TransportInfo.TRANSPORT_MDS, TransportInfo.TRANSPORT_WAP };
 		lcf = new ConnectionFactory();
 		lcf.setPreferredTransportTypes(preferredTransportTypes);
 		lcf.setDisallowedTransportTypes(disallowedTransportTypes);
-
+		ConnectionFactory cf = new ConnectionFactory();
+		cf.setPreferredTransportTypes(preferredTransportTypes);
+		cf.setDisallowedTransportTypes(disallowedTransportTypes);
 		http = new HttpClient(cf);
-	}
-
-	public void setAutoMode(boolean pAutoMode, String pId, String pPwd) {
-		autoMode = pAutoMode;
-		id = pId;
-		pwd = pPwd;
-	}
-
-	public boolean isAutoMode() {
-		return autoMode;
 	}
 
 	public void setPermissions(String[] pPerms) {
@@ -173,11 +148,9 @@ public class Facebook {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new FacebookException(e.getMessage());
 
 		} catch (Throwable t) {
-			t.printStackTrace();
 			throw new FacebookException(t.getMessage());
 		}
 		return result;
@@ -240,176 +213,26 @@ public class Facebook {
 		return result;
 	}
 
-	public JSONObject write(String path, JSONObject object, boolean retry)
-			throws FacebookException {
-		if (!hasAccessToken()) {
-			refreshAccessToken(false);
-		}
-
-		JSONObject result = null;
-
-		Hashtable data = new Hashtable();
-		data.put("access_token", accessToken);
-		data.put("format", "JSON");
-
-		try {
-			JSONObject jo = object;
-			Enumeration keysEnum = jo.keys();
-
-			while (keysEnum.hasMoreElements()) {
-				String key = (String) keysEnum.nextElement();
-				Object val = jo.get(key);
-				if (!(val instanceof JSONObject)) {
-					data.put(key, val.toString());
-				}
-			}
-
-			StringBuffer responseBuffer = checkResponse(http.doPost(GRAPH_URL
-					+ '/' + path, data));
-
-			if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
-				return null;
-			}
-
-			result = new JSONObject(new JSONTokener(responseBuffer.toString()));
-
-		} catch (OAuthException e) {
-			if (retry) {
-				refreshAccessToken(true);
-				result = write(path, object, false);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FacebookException(e.getMessage());
-
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new FacebookException(t.getMessage());
-		}
-		return result;
-	}
-
-	public JSONObject write(String path, JSONObject object, String contentType,
-			byte[] payload, boolean retry) throws FacebookException {
-		if (!hasAccessToken()) {
-			refreshAccessToken(false);
-		}
-
-		JSONObject result = null;
-
-		Hashtable data = new Hashtable();
-		data.put("access_token", accessToken);
-		data.put("format", "JSON");
-
-		try {
-			JSONObject jo = object;
-			Enumeration keysEnum = jo.keys();
-
-			while (keysEnum.hasMoreElements()) {
-				String key = (String) keysEnum.nextElement();
-				Object val = jo.get(key);
-				if (!(val instanceof JSONObject)) {
-					data.put(key, val.toString());
-				}
-			}
-
-			StringBuffer responseBuffer = checkResponse(http.doPostMultipart(
-					GRAPH_URL + '/' + path, data, "name", "filename",
-					contentType, payload));
-
-			if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
-				return null;
-			}
-
-			result = new JSONObject(new JSONTokener(responseBuffer.toString()));
-
-		} catch (OAuthException e) {
-			if (retry) {
-				refreshAccessToken(true);
-				result = write(path, object, contentType, payload, false);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FacebookException(e.getMessage());
-
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new FacebookException(t.getMessage());
-		}
-		return result;
-	}
-
-	public JSONObject delete(String path, boolean retry)
-			throws FacebookException {
-		if (!hasAccessToken()) {
-			refreshAccessToken(false);
-		}
-
-		JSONObject result = null;
-
-		Hashtable data = new Hashtable();
-		data.put("access_token", accessToken);
-		data.put("format", "JSON");
-		data.put("method", "delete");
-
-		try {
-			StringBuffer responseBuffer = checkResponse(http.doPost(GRAPH_URL
-					+ '/' + path, data));
-
-			if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
-				return null;
-			}
-
-			result = new JSONObject(new JSONTokener(responseBuffer.toString()));
-
-		} catch (OAuthException e) {
-			if (retry) {
-				refreshAccessToken(true);
-				result = delete(path, false);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new FacebookException(e.getMessage());
-
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new FacebookException(t.getMessage());
-		}
-		return result;
-	}
-
-	public User getCurrentUser(final AsyncCallback listener)
+	public IUser getCurrentUser(final AsyncCallback listener)
 			throws FacebookException {
 		return getUser("me", listener, null);
 	}
 
-	public User getCurrentUser() throws FacebookException {
+	public IUser getCurrentUser() throws FacebookException {
 		return getUser("me", null, null);
 	}
 
-	public User getUser(final Profile pProfile, final AsyncCallback listener)
-			throws FacebookException {
-		return getUser(pProfile.getId(), listener, null);
-	}
-
-	public User getUser(Profile pProfile) throws FacebookException {
-		return getUser(pProfile.getId());
-	}
-
-	public User getUser(String pId) throws FacebookException {
+	public IUser getUser(String pId) throws FacebookException {
 		return getUser(pId, null, null);
 	}
 
-	public User getUser(final String pId, final AsyncCallback listener,
+	public IUser getUser(final String pId, final AsyncCallback listener,
 			final java.lang.Object state) throws FacebookException {
 		if (listener != null) {
 			new java.lang.Thread() {
 				public void run() {
 					try {
-						User[] result = new User[1];
+						IUser[] result = new IUser[1];
 						result[0] = getUser(pId);
 						listener.onComplete(result, null);
 
@@ -425,7 +248,7 @@ public class Facebook {
 				return null;
 			}
 
-			User result = null;
+			IUser result = null;
 
 			JSONObject jsonObject = read(pId);
 			if ((jsonObject == null) || (jsonObject.length() <= 0)) {
@@ -437,7 +260,7 @@ public class Facebook {
 		}
 	}
 
-	public User getUser(JSONObject jo) throws FacebookException {
+	public IUser getUser(JSONObject jo) throws FacebookException {
 		return new FacebookUser(this, jo);
 	}
 
@@ -512,7 +335,7 @@ public class Facebook {
 					+ appSettings.getPermissionsString() + "&redirect_uri="
 					+ appSettings.getNextUrl() + "&display=wap&client_id="
 					+ appSettings.getApplicationId() + "&response_type=token",
-					lcf, LOADING);
+					lcf);
 		}
 
 		protected boolean hasAccessToken(String pUrl) {
@@ -535,31 +358,6 @@ public class Facebook {
 
 		protected boolean shouldShowContent(BrowserField pbf, Document pdoc) {
 			return !hasAccessToken(pdoc.getDocumentURI());
-		}
-
-		protected boolean postProcessing(BrowserField pbf, Document pdoc) {
-			if (isAutoMode()) {
-				if ((pdoc != null)) {
-					String jsFillId = "document.forms['login_form'].elements['email'].value = '"
-							+ id + "';";
-					String jsFillPwd = "document.forms['login_form'].elements['pass'].value = '"
-							+ pwd + "';";
-					String jsLogin = "setTimeout(\"var evt_l = document.createEvent('MouseEvents'); evt_l.initEvent('click', true, true); document.forms['login_form'].elements['login'].dispatchEvent(evt_l);\",3000);";
-					String jsGrant = "setTimeout(\"var evt_g = document.createEvent('MouseEvents'); evt_g.initEvent('click', true, true); document.getElementsByName('grant_clicked')[0].dispatchEvent(evt_g);\",3000);";
-
-					if ((pdoc.getElementById("login_form") != null)) {
-						pbf.executeScript(jsFillId);
-						pbf.executeScript(jsFillPwd);
-						pbf.executeScript(jsLogin);
-
-					} else if ((pdoc.getElementById("uiserver_form") != null)) {
-						pbf.executeScript(jsGrant);
-					} else {
-					}
-				} else {
-				}
-			}
-			return true;
 		}
 
 		protected String getAccessTokenFromUrl(String url) {
@@ -601,7 +399,7 @@ public class Facebook {
 		private String getExpireDate(String pUrl) {
 			String at = null;
 			if ((url != null) && !url.trim().equals("")) {
-				int startIndex = url.indexOf("#expire_date=");
+				int startIndex = url.indexOf("&expire_date=");
 				if (startIndex > -1) {
 					startIndex++;
 					int stopIndex = url.length();
@@ -711,7 +509,7 @@ public class Facebook {
 		protected LogoutScreen(String pAccessToken) {
 			super("https://m.facebook.com/logout.php?next="
 					+ appSettings.getNextUrl() + "&access_token="
-					+ pAccessToken, lcf, LOADING);
+					+ pAccessToken, lcf);
 		}
 
 		protected boolean hasLogoutStatus(String pUrl) {
@@ -748,12 +546,4 @@ public class Facebook {
 		}
 	}
 
-	public static class PictureTypes {
-		public static final int SMALL = 1;
-		public static final int NORMAL = 2;
-		public static final int LARGE = 3;
-		public static final int SQUARE = 4;
-		public static final int THUMBNAIL = 5;
-		public static final int ALBUM = 6;
-	}
 }

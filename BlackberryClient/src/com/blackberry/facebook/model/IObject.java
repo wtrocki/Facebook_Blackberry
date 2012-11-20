@@ -1,11 +1,9 @@
 /*******************************************************************************
  * BB Facebook Simple client
  *******************************************************************************/
-/*******************************************************************************
- *******************************************************************************/
-package com.blackberry.facebook.inf;
+package com.blackberry.facebook.model;
 
-public interface Object {
+public interface IObject {
 
 	public void fetch(boolean force);
 

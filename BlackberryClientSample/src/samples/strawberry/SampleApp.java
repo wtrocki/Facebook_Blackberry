@@ -7,7 +7,6 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.ButtonField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 
@@ -15,24 +14,20 @@ import com.blackberry.facebook.ApplicationSettings;
 import com.blackberry.facebook.Facebook;
 import com.blackberry.facebook.Permissions;
 
-public class StrawBerry extends UiApplication {
+public class SampleApp extends UiApplication {
 
 	private final String NEXT_URL = "http://www.facebook.com/connect/login_success.html";
 	private final String APPLICATION_ID = "153555168010272";
 	private final String APPLICATION_SECRET = "354f91a79c8fe5a8de9d65b55ef9aa1b";
-	private Facebook fb;
 	private Facebook fb4u;
 
 	public static void main(String[] args) {
-		StrawBerry strawBerry = new StrawBerry();
+		SampleApp strawBerry = new SampleApp();
 		strawBerry.enterEventDispatcher();
 	}
 
-	public StrawBerry() {
+	public SampleApp() {
 		checkPermissions();
-		fb = Facebook.getInstance(new ApplicationSettings(NEXT_URL,
-				APPLICATION_ID, APPLICATION_SECRET,
-				Permissions.ALL_PERMISSIONS));
 		fb4u = Facebook.getInstance(new ApplicationSettings(NEXT_URL,
 				APPLICATION_ID, APPLICATION_SECRET,
 				Permissions.USER_DATA_PERMISSIONS));
@@ -91,41 +86,22 @@ public class StrawBerry extends UiApplication {
 	public class HomeScreen extends MainScreen {
 
 		protected ButtonField showUserButton = null;
-		protected ButtonField logoutButton = null;
 
 		public HomeScreen() {
 			super();
 
-			showUserButton = new ButtonField("Show Current User") {
+			showUserButton = new ButtonField("Show User") {
 				protected boolean invokeAction(int action) {
 					UiApplication.getUiApplication().pushScreen(
-							new ShowUserScreen(fb));
+							new ShowUserScreen(fb4u));
 					return true;
 				}
 			};
-
-			logoutButton = new ButtonField("Logout") {
-				protected boolean invokeAction(int action) {
-					if (fb.logout()) {
-						Dialog.inform("Logout Success.");
-					} else {
-						Dialog.inform("Logout Failed.");
-					}
-					return true;
-				}
-			};
-
-			setTitle(new LabelField("StrawBerry", LabelField.ELLIPSIS
-					| LabelField.USE_ALL_WIDTH));
 			add(showUserButton);
-			add(logoutButton);
+			setTitle(new LabelField("Facebook api sample", LabelField.ELLIPSIS
+					| LabelField.USE_ALL_WIDTH));
 
 		}
-
-		protected boolean onSavePrompt() {
-			return true;
-		}
-
 	}
 
 }
