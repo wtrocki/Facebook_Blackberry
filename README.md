@@ -17,4 +17,4 @@ Design goals:
 	Support for all facebook objects 
 	Support for posting, editing data. 
 
-Based on pseudo official RIM library https://github.com/chrismoos/facebook-bb-sdk
+Based on https://github.com/chrismoos/facebook-bb-sdk
