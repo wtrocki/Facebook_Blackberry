@@ -2,7 +2,7 @@ Facebook_Blackberry
 ===================
 
 Simple, lightweight facebook client for blackberry.
-Use this api for small clients, that use facebook only for retrieving access token and user data and .
+Use this api for clients, that use facebook only for retrieving access token and user data.
 
 Design goals:
     
