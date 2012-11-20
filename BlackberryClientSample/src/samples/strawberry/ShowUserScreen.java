@@ -36,7 +36,6 @@ public class ShowUserScreen extends MainScreen {
 				return true;
 			}
 		};
-
 		setTitle(new LabelField("Loading...", LabelField.ELLIPSIS
 				| LabelField.USE_ALL_WIDTH));
 
