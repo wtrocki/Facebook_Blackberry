@@ -17,9 +17,7 @@ import com.blackberry.facebook.model.IUser;
 public class ShowUserScreen extends MainScreen {
 
 	protected ButtonField tryAgainButton = null;
-	protected VerticalFieldManager vfm1 = null;
 	protected VerticalFieldManager vfm2 = null;
-	protected VerticalFieldManager vfm3 = null;
 	protected Facebook fb;
 	protected IUser user;
 
@@ -33,7 +31,6 @@ public class ShowUserScreen extends MainScreen {
 
 		tryAgainButton = new ButtonField("Try Again") {
 			protected boolean invokeAction(int action) {
-				delete(vfm1);
 				delete(vfm2);
 				showUserSync(pUserId);
 				return true;
@@ -43,10 +40,7 @@ public class ShowUserScreen extends MainScreen {
 		setTitle(new LabelField("Loading...", LabelField.ELLIPSIS
 				| LabelField.USE_ALL_WIDTH));
 
-		vfm1 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
-		vfm1.add(tryAgainButton);
 		vfm2 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
-		vfm3 = new VerticalFieldManager(VerticalFieldManager.VERTICAL_SCROLL);
 		showUserAsync(pUserId);
 	}
 
@@ -63,7 +57,6 @@ public class ShowUserScreen extends MainScreen {
 			vfm2.add(new LabelField("updated_time = "
 					+ user.getUpdatedTimeAsString()));
 			add(vfm2);
-			add(vfm3);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,7 +64,6 @@ public class ShowUserScreen extends MainScreen {
 					| LabelField.USE_ALL_WIDTH));
 			vfm2.deleteAll();
 			vfm2.add(new LabelField("Exception: " + e.getMessage()));
-			add(vfm1);
 			add(vfm2);
 
 		} finally {
@@ -115,12 +107,9 @@ public class ShowUserScreen extends MainScreen {
 							vfm2.deleteAll();
 							vfm2.add(new LabelField("Exception: "
 									+ e.getMessage()));
-							add(vfm1);
-							delete(vfm3);
 						}
 					});
 				}
-
 			}, null);
 
 		} catch (FacebookException e) {
@@ -136,8 +125,6 @@ public class ShowUserScreen extends MainScreen {
 		vfm2.add(new LabelField("birthday = ..."));
 		vfm2.add(new LabelField("updated_time = ..."));
 		add(vfm2);
-		add(vfm3);
-
 	}
 
 	protected boolean onSavePrompt() {

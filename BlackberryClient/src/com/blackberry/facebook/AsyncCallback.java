@@ -1,5 +1,6 @@
 package com.blackberry.facebook;
 
+
 import com.blackberry.facebook.model.IObject;
 
 import net.rim.device.api.system.Bitmap;
