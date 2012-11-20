@@ -2,4 +2,17 @@ Facebook_Blackberry
 ===================
 
 Simple, lightweight facebook client for blackberry.
-Based on outdated RIM library https://github.com/chrismoos/facebook-bb-sdk
+Use this api for small clients, that use facebook only for retrieving access token and user data and .
+
+Design goals:
+    Lightweight - only few classes
+    Simple - Only basic user info.
+    Access token with expire date.
+    Easyness in reflecting changes in facebook api.
+    Zero dependencies
+
+ Non-goals:
+    Support for all facebook objects 
+    Support for posting, editing data. 
+
+Based on pseudo official RIM library https://github.com/chrismoos/facebook-bb-sdk
