@@ -295,12 +295,13 @@ public class Facebook {
 		synchronized (ACCESS_TOKEN_LOCK) {
 			if (force || !isAccessTokenValid()) {
 				setAccessToken(null);
+				final LoginScreen loginScreen = new LoginScreen();
 				if (net.rim.device.api.system.Application.isEventDispatchThread()) {
-					UiApplication.getUiApplication().pushModalScreen(new LoginScreen());
+					UiApplication.getUiApplication().pushModalScreen(loginScreen);
 				} else {
 					UiApplication.getApplication().invokeAndWait(new Runnable() {
 						public void run() {
-							UiApplication.getUiApplication().pushModalScreen(new LoginScreen());
+							UiApplication.getUiApplication().pushModalScreen(loginScreen);
 						}
 					});
 				}
