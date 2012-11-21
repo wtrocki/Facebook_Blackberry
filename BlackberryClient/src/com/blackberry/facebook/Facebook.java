@@ -39,11 +39,10 @@ public class Facebook {
 
 	protected Facebook(ApplicationSettings pAppSettings) {
 		appSettings = pAppSettings;
-		int[] preferredTransportTypes = { TransportInfo.TRANSPORT_TCP_WIFI,
-				TransportInfo.TRANSPORT_TCP_CELLULAR,
-				TransportInfo.TRANSPORT_WAP2 };
-		int[] disallowedTransportTypes = { TransportInfo.TRANSPORT_BIS_B,
-				TransportInfo.TRANSPORT_MDS, TransportInfo.TRANSPORT_WAP };
+		int[] preferredTransportTypes = {TransportInfo.TRANSPORT_TCP_WIFI, TransportInfo.TRANSPORT_TCP_CELLULAR,
+				TransportInfo.TRANSPORT_WAP2};
+		int[] disallowedTransportTypes = {TransportInfo.TRANSPORT_BIS_B, TransportInfo.TRANSPORT_MDS,
+				TransportInfo.TRANSPORT_WAP};
 		lcf = new ConnectionFactory();
 		lcf.setPreferredTransportTypes(preferredTransportTypes);
 		lcf.setDisallowedTransportTypes(disallowedTransportTypes);
@@ -72,26 +71,22 @@ public class Facebook {
 			newPerms[oldPerms.length] = pPerm;
 			setPermissions(newPerms);
 		} else {
-			String[] newPerms = new String[] { pPerm };
+			String[] newPerms = new String[] {pPerm};
 			setPermissions(newPerms);
 		}
 	}
 
-	public StringBuffer checkResponse(StringBuffer res)
-			throws FacebookException {
+	public StringBuffer checkResponse(StringBuffer res) throws FacebookException {
 		StringBuffer result = null;
 		try {
 			if ((res != null) && (res.length() > 0) && (res.length() < 500)) {
-				if ((res.charAt(0) == '{')
-						&& (res.charAt(res.length() - 1) == '}')) {
-					JSONObject jo = new JSONObject(new JSONTokener(
-							res.toString()));
+				if ((res.charAt(0) == '{') && (res.charAt(res.length() - 1) == '}')) {
+					JSONObject jo = new JSONObject(new JSONTokener(res.toString()));
 					if ((jo != null) && jo.has("error")) {
 						JSONObject error = jo.getJSONObject("error");
 						String errorType = error.optString("type");
 						String errorMessage = error.optString("message");
-						if ((errorType != null)
-								&& errorType.trim().equals("OAuthException")) {
+						if ((errorType != null) && errorType.trim().equals("OAuthException")) {
 							throw new OAuthException(errorMessage);
 						} else {
 							throw new UnknownException(errorMessage);
@@ -110,8 +105,7 @@ public class Facebook {
 		return read(path, null, true);
 	}
 
-	public JSONObject read(String path, Hashtable params, boolean retry)
-			throws FacebookException {
+	public JSONObject read(String path, Hashtable params, boolean retry) throws FacebookException {
 		if (!hasAccessToken()) {
 			refreshAccessToken(false);
 		}
@@ -132,8 +126,7 @@ public class Facebook {
 		}
 
 		try {
-			StringBuffer responseBuffer = checkResponse(http.doGet(GRAPH_URL
-					+ '/' + path, args));
+			StringBuffer responseBuffer = checkResponse(http.doGet(GRAPH_URL + '/' + path, args));
 
 			if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
 				result = null;
@@ -156,13 +149,11 @@ public class Facebook {
 		return result;
 	}
 
-	public byte[] readRaw(String path, boolean relative)
-			throws FacebookException {
+	public byte[] readRaw(String path, boolean relative) throws FacebookException {
 		return readRaw(path, null, relative, true);
 	}
 
-	public byte[] readRaw(String path, Hashtable params, boolean relative,
-			boolean retry) throws FacebookException {
+	public byte[] readRaw(String path, Hashtable params, boolean relative, boolean retry) throws FacebookException {
 		if (!hasAccessToken()) {
 			refreshAccessToken(false);
 		}
@@ -184,8 +175,7 @@ public class Facebook {
 		try {
 			StringBuffer responseBuffer;
 			if (relative) {
-				responseBuffer = checkResponse(http.doGet(GRAPH_URL + '/'
-						+ path, args));
+				responseBuffer = checkResponse(http.doGet(GRAPH_URL + '/' + path, args));
 			} else {
 				responseBuffer = checkResponse(http.doGet(path, args));
 			}
@@ -213,8 +203,7 @@ public class Facebook {
 		return result;
 	}
 
-	public IUser getCurrentUser(final AsyncCallback listener)
-			throws FacebookException {
+	public IUser getCurrentUser(final AsyncCallback listener) throws FacebookException {
 		return getUser("me", listener, null);
 	}
 
@@ -226,8 +215,8 @@ public class Facebook {
 		return getUser(pId, null, null);
 	}
 
-	public IUser getUser(final String pId, final AsyncCallback listener,
-			final java.lang.Object state) throws FacebookException {
+	public IUser getUser(final String pId, final AsyncCallback listener, final java.lang.Object state)
+		throws FacebookException {
 		if (listener != null) {
 			new java.lang.Thread() {
 				public void run() {
@@ -268,7 +257,7 @@ public class Facebook {
 		return accessToken;
 	}
 
-	public void setAccessToken(String pAccessToken) {
+	protected void setAccessToken(String pAccessToken) {
 		accessToken = pAccessToken;
 	}
 
@@ -306,23 +295,18 @@ public class Facebook {
 		synchronized (ACCESS_TOKEN_LOCK) {
 			if (force || !isAccessTokenValid()) {
 				setAccessToken(null);
-				if (net.rim.device.api.system.Application
-						.isEventDispatchThread()) {
-					UiApplication.getUiApplication().pushModalScreen(
-							new LoginScreen());
+				if (net.rim.device.api.system.Application.isEventDispatchThread()) {
+					UiApplication.getUiApplication().pushModalScreen(new LoginScreen());
 				} else {
-					UiApplication.getApplication().invokeAndWait(
-							new Runnable() {
-								public void run() {
-									UiApplication.getUiApplication()
-											.pushModalScreen(new LoginScreen());
-								}
-							});
+					UiApplication.getApplication().invokeAndWait(new Runnable() {
+						public void run() {
+							UiApplication.getUiApplication().pushModalScreen(new LoginScreen());
+						}
+					});
 				}
 
 				if (!hasAccessToken()) {
-					throw new FacebookException(
-							"Unable to refresh the Access Token");
+					throw new FacebookException("Unable to refresh the Access Token");
 				}
 			}
 		}
@@ -331,11 +315,9 @@ public class Facebook {
 	protected class LoginScreen extends BrowserScreen {
 
 		protected LoginScreen() {
-			super("https://www.facebook.com/dialog/oauth?scope="
-					+ appSettings.getPermissionsString() + "&redirect_uri="
-					+ appSettings.getNextUrl() + "&display=wap&client_id="
-					+ appSettings.getApplicationId() + "&response_type=token",
-					lcf);
+			super("https://www.facebook.com/dialog/oauth?scope=" + appSettings.getPermissionsString()
+				+ "&redirect_uri=" + appSettings.getNextUrl() + "&display=wap&client_id="
+				+ appSettings.getApplicationId() + "&response_type=token", lcf);
 		}
 
 		protected boolean hasAccessToken(String pUrl) {
@@ -374,8 +356,7 @@ public class Facebook {
 					} else if (url.indexOf(';', startIndex) > -1) {
 						stopIndex = url.indexOf(';', startIndex);
 					}
-					at = url.substring(url.indexOf('=', startIndex) + 1,
-							stopIndex);
+					at = url.substring(url.indexOf('=', startIndex) + 1, stopIndex);
 
 				} else {
 					startIndex = url.indexOf("?code=");
@@ -387,8 +368,7 @@ public class Facebook {
 						} else if (url.indexOf(';', startIndex) > -1) {
 							stopIndex = url.indexOf(';', startIndex);
 						}
-						code = url.substring(url.indexOf('=', startIndex) + 1,
-								stopIndex);
+						code = url.substring(url.indexOf('=', startIndex) + 1, stopIndex);
 						at = getAccessTokenFromCode(code);
 					}
 				}
@@ -428,8 +408,7 @@ public class Facebook {
 			args.put("code", pCode);
 
 			try {
-				StringBuffer responseBuffer = http
-						.doGet(ACCESS_TOKEN_URL, args);
+				StringBuffer responseBuffer = http.doGet(ACCESS_TOKEN_URL, args);
 
 				if ((responseBuffer == null) || (responseBuffer.length() <= 0)) {
 					at = null;
@@ -464,18 +443,14 @@ public class Facebook {
 			if ((at != null) && !at.equals("")) {
 				final LogoutScreen logoutScreen = new LogoutScreen(at);
 
-				if (net.rim.device.api.system.Application
-						.isEventDispatchThread()) {
-					UiApplication.getUiApplication().pushModalScreen(
-							logoutScreen);
+				if (net.rim.device.api.system.Application.isEventDispatchThread()) {
+					UiApplication.getUiApplication().pushModalScreen(logoutScreen);
 				} else {
-					UiApplication.getApplication().invokeAndWait(
-							new Runnable() {
-								public void run() {
-									UiApplication.getUiApplication()
-											.pushModalScreen(logoutScreen);
-								}
-							});
+					UiApplication.getApplication().invokeAndWait(new Runnable() {
+						public void run() {
+							UiApplication.getUiApplication().pushModalScreen(logoutScreen);
+						}
+					});
 				}
 
 				if (clearAccessToken) {
@@ -506,9 +481,8 @@ public class Facebook {
 		public boolean loggedOut = false;
 
 		protected LogoutScreen(String pAccessToken) {
-			super("https://m.facebook.com/logout.php?next="
-					+ appSettings.getNextUrl() + "&access_token="
-					+ pAccessToken, lcf);
+			super("https://m.facebook.com/logout.php?next=" + appSettings.getNextUrl() + "&access_token="
+				+ pAccessToken, lcf);
 		}
 
 		protected boolean hasLogoutStatus(String pUrl) {
@@ -534,8 +508,7 @@ public class Facebook {
 		protected boolean checkLogoutStatusFromUrl(String url) {
 			boolean result = false;
 			if ((url != null) && !url.trim().equals("")) {
-				if ((url.indexOf("login_success.html") > -1)
-						&& (url.indexOf("logout.php") == -1)) {
+				if ((url.indexOf("login_success.html") > -1) && (url.indexOf("logout.php") == -1)) {
 					result = true;
 				} else {
 					result = false;
