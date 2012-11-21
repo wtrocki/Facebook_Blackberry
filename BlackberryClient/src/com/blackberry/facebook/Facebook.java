@@ -396,20 +396,19 @@ public class Facebook {
 			return at;
 		}
 
-		private String getExpireDate(String pUrl) {
+		private String getExpireDate(String tokenUrl) {
 			String at = null;
-			if ((url != null) && !url.trim().equals("")) {
-				int startIndex = url.indexOf("&expire_date=");
+			if ((tokenUrl != null) && !tokenUrl.trim().equals("")) {
+				int startIndex = tokenUrl.indexOf("&expires_in=");
 				if (startIndex > -1) {
 					startIndex++;
-					int stopIndex = url.length();
-					if (url.indexOf('&', startIndex) > -1) {
-						stopIndex = url.indexOf('&', startIndex);
-					} else if (url.indexOf(';', startIndex) > -1) {
-						stopIndex = url.indexOf(';', startIndex);
+					int stopIndex = tokenUrl.length();
+					if (tokenUrl.indexOf('&', startIndex) > -1) {
+						stopIndex = tokenUrl.indexOf('&', startIndex);
+					} else if (tokenUrl.indexOf(';', startIndex) > -1) {
+						stopIndex = tokenUrl.indexOf(';', startIndex);
 					}
-					at = url.substring(url.indexOf('=', startIndex) + 1,
-							stopIndex);
+					at = tokenUrl.substring(tokenUrl.indexOf('=', startIndex) + 1, stopIndex);
 				}
 			}
 			return at;
